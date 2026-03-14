@@ -1,0 +1,262 @@
+﻿<Window x:Class="WpfDisciplines.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Учет дисциплин" 
+        Height="600" 
+        Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="#F0F2F5"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Window.Resources>
+        
+        <Style x:Key="MenuButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Background" Value="#34495E"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                Padding="20,0,0,0">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2980B9"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="#3498DB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2980B9"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+   
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        
+        <Border Grid.Row="0" Grid.ColumnSpan="2"
+                Background="#2C3E50">
+            <Grid>
+                <TextBlock Text="📚 Управление учебными дисциплинами"
+                          FontSize="18"
+                          FontWeight="Bold"
+                          Foreground="White"
+                          Margin="20,15,0,0"/>
+
+                <StackPanel Orientation="Horizontal"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           Margin="0,0,10,0">
+                    <Button Content="─"
+                           Width="40"
+                           Height="40"
+                           Background="#34495E"
+                           Foreground="White"
+                           FontSize="18"
+                           BorderThickness="0"
+                           Click="MinimizeWindow"/>
+                    <Button Content="✕"
+                           Width="40"
+                           Height="40"
+                           Background="#C0392B"
+                           Foreground="White"
+                           FontSize="18"
+                           BorderThickness="0"
+                           Margin="5,0,0,0"
+                           Click="CloseWindow"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        
+        <Border Grid.Row="1" Grid.Column="0"
+                Background="#34495E">
+            <StackPanel>
+               
+                <Border Height="100"
+                       Background="#2C3E50">
+                    <TextBlock Text="📋"
+                              FontSize="40"
+                              Foreground="White"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"/>
+                </Border>
+
+                
+                <Button Content="📊  Все дисциплины"
+                       Style="{StaticResource MenuButtonStyle}"
+                       Click="ShowAll_Click"/>
+                <Button Content="➕  Добавить"
+                       Style="{StaticResource MenuButtonStyle}"
+                       Click="ShowAdd_Click"/>
+                <Button Content="🗑️  Удалить"
+                       Style="{StaticResource MenuButtonStyle}"
+                       Click="ShowDelete_Click"/>
+                <Button Content="✅  Изменить статус"
+                       Style="{StaticResource MenuButtonStyle}"
+                       Click="ShowStatus_Click"/>
+                <Button Content="🔍  Фильтр"
+                       Style="{StaticResource MenuButtonStyle}"
+                       Click="ShowFilter_Click"/>
+                <Button Content="💾  Сохранить"
+                       Style="{StaticResource MenuButtonStyle}"
+                       Click="Save_Click"/>
+            </StackPanel>
+        </Border>
+
+        
+        <Border Grid.Row="1" Grid.Column="1"
+                Background="#ECF0F1"
+                Padding="20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="250"/>
+                </Grid.ColumnDefinitions>
+
+                
+                <TextBlock x:Name="TitleText"
+                          Grid.Row="0" Grid.ColumnSpan="2"
+                          Text="Все дисциплины"
+                          FontSize="22"
+                          FontWeight="Bold"
+                          Foreground="#2C3E50"
+                          Margin="0,0,0,10"/>
+
+               
+                <TextBlock x:Name="TimeText"
+                          Grid.Row="1" Grid.ColumnSpan="2"
+                          Text="{Binding CurrentTime}"
+                          FontSize="12"
+                          Foreground="#7F8C8D"
+                          Margin="0,0,0,20"/>
+
+              
+                <ListBox x:Name="DisciplinesList"
+                        Grid.Row="2" Grid.Column="0"
+                        Margin="0,0,20,0"
+                        Background="White"
+                        BorderThickness="1"
+                        BorderBrush="#BDC3C7"
+                        FontSize="12"
+                        SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" 
+                                      Margin="5"
+                                      FontSize="12"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+              
+                <StackPanel Grid.Row="2" Grid.Column="1"
+                           VerticalAlignment="Top">
+
+                    <TextBlock Text="Название дисциплины:"
+                              FontSize="11"
+                              Foreground="#2C3E50"
+                              Margin="0,0,0,5"/>
+
+                    <TextBox x:Name="NameTextBox"
+                            Height="30"
+                            FontSize="12"
+                            Padding="5"
+                            BorderBrush="#BDC3C7"
+                            BorderThickness="1"
+                            Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Тип:"
+                              FontSize="11"
+                              Foreground="#2C3E50"
+                              Margin="0,0,0,5"/>
+
+                    <ComboBox x:Name="TypeComboBox"
+                             Height="30"
+                             FontSize="12"
+                             Margin="0,0,0,15">
+                        <ComboBoxItem Content="Экзамен" IsSelected="True"/>
+                        <ComboBoxItem Content="Зачет"/>
+                    </ComboBox>
+
+                    <TextBlock Text="Статус:"
+                              FontSize="11"
+                              Foreground="#2C3E50"
+                              Margin="0,0,0,5"/>
+
+                    <ComboBox x:Name="StatusComboBox"
+                             Height="30"
+                             FontSize="12"
+                             Margin="0,0,0,20">
+                        <ComboBoxItem Content="Не сдан" IsSelected="True"/>
+                        <ComboBoxItem Content="Сдан"/>
+                    </ComboBox>
+
+                    <Button Content="Выполнить"
+                           Style="{StaticResource ModernButton}"
+                           Click="ExecuteAction_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        
+        <Border Grid.Row="2" Grid.ColumnSpan="2"
+                Background="#2C3E50">
+            <TextBlock x:Name="StatusText"
+                      Text="✓ Готов к работе"
+                      Foreground="White"
+                      FontSize="11"
+                      Margin="10,5,0,0"/>
+        </Border>
+    </Grid>
+</Window>
